@@ -36,7 +36,7 @@ class Blast < Formula
   depends_on "lzo"      => :optional
   depends_on "pcre"     => :recommended
   depends_on :mysql     => :optional
-  depends_on :python if MacOS.version <= :snow_leopard
+  depends_on :python if MacOS.version <= :snow_leopard and OS.mac?
 
   def install
     # Fix error:
