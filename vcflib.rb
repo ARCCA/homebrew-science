@@ -3,8 +3,8 @@ class Vcflib < Formula
   homepage "https://github.com/ekg/vcflib"
   # tag "bioinformatics"
 
-  url "https://github.com/ekg/vcflib.git",
-    :tag => "v1.0.0-rc0", :revision => "8ac9fd517579134ef3b9797714d20c9c99c18ec6"
+  url "https://github.com/ekg/vcflib/archive/v1.0.0-rc0.tar.gz"
+  sha256 "c5236f9db068341d064e4ffc3d32ba942f7a371c81a4f43dc5a9d3ab47641ffd"
   head "https://github.com/ekg/vcflib.git"
 
   bottle do
