@@ -4,12 +4,12 @@ class Opencv < Formula
   url "https://github.com/Itseez/opencv/archive/2.4.12.tar.gz"
   sha256 "8989f946a66fa3fc2764d637b1c866caf28d074ece187f86baba66544054eefc"
   head "https://github.com/Itseez/opencv.git", :branch => "2.4"
+  revision 2
 
   bottle do
-    revision 1
-    sha256 "692723f2512022cdf5828fa768b2f66c228936bbc57b498cf6777f0f443ea78d" => :yosemite
-    sha256 "ea1b5f3560afc5e282ee3c1ba7f6f2d042440da1e9257645c7506850e80162f1" => :mavericks
-    sha256 "212216516f3f2b47c310dc9ab7bd856469615ce71de9dfa09706eb9c7d4ea302" => :mountain_lion
+    sha256 "3e584f97f377b8ac0f7e55efa494bdb0fb108930212f5fb8a03cecc18f9b1d43" => :el_capitan
+    sha256 "c60dc79ecf71499e91945726f4e0fd3f7abaf2dac92e4a8d081c4be48d39dcac" => :yosemite
+    sha256 "f4e3fdf22515e9847f70fcd71ef96eef06e68077f054e0178417fe073594fd83" => :mavericks
   end
 
   option "32-bit"
@@ -28,6 +28,7 @@ class Opencv < Formula
   deprecated_option "without-brewed-numpy" => "without-numpy"
 
   option :cxx11
+  option :universal
 
   depends_on :ant if build.with? "java"
   depends_on "cmake"      => :build
@@ -45,6 +46,7 @@ class Opencv < Formula
   depends_on "pkg-config" => :build
   depends_on "qt"         => :optional
   depends_on "tbb"        => :optional
+  depends_on "vtk"        => :optional
 
   depends_on :python => :recommended unless OS.mac? && MacOS.version > :snow_leopard
   depends_on "homebrew/python/numpy" => :recommended if build.with? "python"
@@ -88,6 +90,7 @@ class Opencv < Formula
     args << "-DWITH_QT="        + arg_switch("qt")
     args << "-DWITH_GSTREAMER=" + arg_switch("gstreamer")
     args << "-DWITH_XIMEA="     + arg_switch("ximea")
+    args << "-DWITH_VTK="       + arg_switch("vtk")
 
     if build.with? "python"
       py_prefix = `python-config --prefix`.chomp
@@ -124,6 +127,11 @@ class Opencv < Formula
       args << "-DCMAKE_OSX_ARCHITECTURES=i386"
       args << "-DOPENCV_EXTRA_C_FLAGS='-arch i386 -m32'"
       args << "-DOPENCV_EXTRA_CXX_FLAGS='-arch i386 -m32'"
+    end
+
+    if build.universal?
+      ENV.universal_binary
+      args << "-DCMAKE_OSX_ARCHITECTURES=#{Hardware::CPU.universal_archs.as_cmake_arch_flags}"
     end
 
     if ENV.compiler == :clang && !build.bottle?

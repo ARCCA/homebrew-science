@@ -1,14 +1,14 @@
 class BioformatsCpp < Formula
   desc "Microscopy file formats including OME-TIFF"
   homepage "http://www.openmicroscopy.org/site/products/bio-formats"
-  url "http://downloads.openmicroscopy.org/bio-formats/5.1.5/artifacts/bioformats-dfsg-5.1.5.zip"
-  sha256 "eac9cbc3b0dc4223a0c71742988799e933b258d65f4d088169c9d756862570b6"
+  url "http://downloads.openmicroscopy.org/bio-formats/5.1.8/artifacts/bioformats-dfsg-5.1.8.zip"
+  sha256 "b760dc17465c7985a808c0f70a568c4faebe51f8aeaeab56afe1dbc29061c9b8"
   head "https://github.com/openmicroscopy/bioformats.git", :branch => "develop", :shallow => false
 
   bottle do
-    sha256 "46496d56d07cc8f344b90ad81c2527e3f803c67d69f5f8229598323a1ef0dce7" => :el_capitan
-    sha256 "0a09197a6070aecfb1a2be3456eccb677703f5c812f1bb222da0af954aaa4dad" => :yosemite
-    sha256 "07a6548d14987ac3a5a9401aa4abe532d37d49b963016688353eaf507585e4c6" => :mavericks
+    sha256 "4d3b0a13171684836b20823e22ff22712706a7dc7ee925b63e60cd6e867d87e8" => :el_capitan
+    sha256 "892ce30c8cba75081ca6ec0ffa40de66e20a23636b8a4e111e50aba7d13e3b91" => :yosemite
+    sha256 "ef40a74b3188a7d30ad4a3bb8c77906d46648c7fb10b7434dbc3e5f6dd1e8904" => :mavericks
   end
 
   option "without-check", "Skip build time tests (not recommended)"

@@ -3,12 +3,13 @@ class Mlpack < Formula
   # doi "arXiv:1210.6293"
   url "http://www.mlpack.org/files/mlpack-1.0.12.tar.gz"
   sha256 "f47abfc2ab75f1d7f4c73a3368c4428223f025cc6fbc6703735df6a2734a838c"
+  revision 2
 
   bottle do
     cellar :any
-    sha256 "38230ff4a36fe2aae5eaaeef91078aed3ae03d8c95799f8ddbf1dddeac67e815" => :yosemite
-    sha256 "3a644c1c52c1bc935844768791fd76c27af995ca0c79a3a2bbf7833ed6e1d16e" => :mavericks
-    sha256 "9b8fd8ca8c7c001a73a83796a3e200d445861c4f3aa1a9cba7c5bfa9f023cc96" => :mountain_lion
+    sha256 "f7fa9efb1d6d75f651be3768d940d144db0742f01a500db4221c9b3b085fc9fc" => :el_capitan
+    sha256 "7d0f0d82b3ebf2f87c5726057dae0c0ca6ea5074cd890e6c8213aef02eb3dae0" => :yosemite
+    sha256 "61698e951d7139f5ae272e16f43678c6340ec55ab1df788e3c3969126f0d0e1e" => :mavericks
   end
 
   needs :cxx11
@@ -26,7 +27,7 @@ class Mlpack < Formula
 
   def install
     ENV.cxx11
-    dylib = OS.mac? ?  "dylib" : "so"
+    dylib = OS.mac? ? "dylib" : "so"
     cmake_args = std_cmake_args
     cmake_args << "-DDEBUG=" + ((build.with? "debug") ? "ON" : "OFF")
     cmake_args << "-DPROFILE=" + ((build.with? "profile") ? "ON" : "OFF")
@@ -41,7 +42,7 @@ class Mlpack < Formula
     end
 
     doc.install Dir["doc/*"]
-    (share / "mlpack").install "src/mlpack/tests"  # Includes test data.
+    (share / "mlpack").install "src/mlpack/tests" # Includes test data.
   end
 
   test do

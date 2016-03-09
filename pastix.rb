@@ -1,16 +1,14 @@
 class Pastix < Formula
   homepage "http://pastix.gforge.inria.fr"
-  url "https://gforge.inria.fr/frs/download.php/file/34392/pastix_5.2.2.20.tar.bz2"
-  sha1 "d55acf287ed0b6a59fc12606a21e42e3d38507c5"
+  url "https://gforge.inria.fr/frs/download.php/file/35070/pastix_5.2.2.22.tar.bz2"
+  sha256 "30f771a666719e6b116f549a6e4da451beabab99c2ecabc0745247c3654acbed"
   head "git://scm.gforge.inria.fr/ricar/ricar.git"
-  revision 3
 
   bottle do
     cellar :any
-    revision 1
-    sha256 "4a8f070338de3d09e69efd4936338b2c3fe6ba9c2b3d051958f40c9c598a11ca" => :yosemite
-    sha256 "a4bc4f60cf4644e2c687ab54e5380c6e92179c37c7832f1722b1dd0f65e14cdf" => :mavericks
-    sha256 "a34ca19641f67812aa92e18b58d77056f104aaa56d4da6542f71fc8fc6fc327d" => :mountain_lion
+    sha256 "5e869942f2f3135a2f30904562da41499ed4ea37e79977937e3f16427cf36338" => :el_capitan
+    sha256 "4d73dd7b0e1178d70e7735985a2bc2f5644c69d7affb0baceb2d2a196cbb13ef" => :yosemite
+    sha256 "587c476096843035bc9f7b548b9515013f4cf85e382c00f4773bbb41aaa020ca" => :mavericks
   end
 
   depends_on "scotch"
@@ -83,18 +81,23 @@ class Pastix < Formula
       end
       system "make"
       system "make", "install"
-      system "make", "examples"
+
+      # Build examples against just installed libraries, so they continue to
+      # work once the temporary directory is gone, e.g., for `brew test`.
+      system "make", "examples", "PASTIX_BIN=#{bin}",
+                                 "PASTIX_LIB=#{lib}",
+                                 "PASTIX_INC=#{include}"
       system "./example/bin/simple", "-lap", "100"
-      prefix.install "config.in"    # For the record.
-      pkgshare.install "example"       # Contains all test programs.
-      ohai "Simple test result is in ~/Library/Logs/Homebrew/pastix. Please check."
+      prefix.install "config.in" # For the record.
+      pkgshare.install "example" # Contains all test programs.
+      ohai "Simple test result is in #{HOMEBREW_LOGS}/pastix. Please check."
     end
   end
 
   test do
     Dir.foreach("#{pkgshare}/example/bin") do |example|
       next if example =~ /^\./ || example =~ /plot_memory_usage/ || example =~ /mem_trace.o/ || example =~ /murge_sequence/
-      next if example == "reentrant"  # May fail due to thread handling. See http://goo.gl/SKDGPV
+      next if example == "reentrant" # May fail due to thread handling. See http://goo.gl/SKDGPV
       if example == "murge-product"
         system "#{pkgshare}/example/bin/#{example}", "100", "10", "1"
       elsif example =~ /murge/
@@ -103,6 +106,6 @@ class Pastix < Formula
         system "#{pkgshare}/example/bin/#{example}", "-lap", "100"
       end
     end
-    ohai "All test output is in ~/Library/Logs/Homebrew/pastix. Please check."
+    ohai "All test output is in #{HOMEBREW_LOGS}/pastix. Please check."
   end
 end

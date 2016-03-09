@@ -3,13 +3,14 @@ class Parmetis < Formula
   homepage "http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview"
   url "http://glaros.dtc.umn.edu/gkhome/fetch/sw/parmetis/parmetis-4.0.3.tar.gz"
   sha256 "f2d9a231b7cf97f1fee6e8c9663113ebf6c240d407d3c118c55b3633d6be6e5f"
-  revision 2
+  revision 3
 
   bottle do
     cellar :any
-    sha256 "97d9155206582f0005bcc622d8a397fdc57f6c5e853d41cf2600e315e367a679" => :yosemite
-    sha256 "7b600352e2d137de385d6fd436d9ef1410d73c28ca069b1079377125ef414ead" => :mavericks
-    sha256 "071cf81ba1611fa0a3b2fb9383308cfe8c79c3cbacfd958f5ffc0cba3199b8d1" => :mountain_lion
+    revision 1
+    sha256 "66e3210a6eb2732f918f9e4b174e4c52d553b954d01cdee5ffde271a2712a9d7" => :el_capitan
+    sha256 "f3d9c17661f349c210776d2cfe356f0f44f33030a15069ce3768fb0d33fa96aa" => :yosemite
+    sha256 "51f43d7091a5381df7d0012e2e72958fc61f914ace90fdde0229a9d29a2fda40" => :mavericks
   end
 
   # METIS 5.* is required. It comes bundled with ParMETIS.
@@ -25,12 +26,12 @@ class Parmetis < Formula
   # bug fixes from PETSc developers
   patch do
     url "https://bitbucket.org/petsc/pkg-parmetis/commits/82409d68aa1d6cbc70740d0f35024aae17f7d5cb/raw/"
-    sha256 "d72c9a656a33b6715cc1601a4a1a89944da00e9911b4ab2d3908d41a32dee31b"
+    sha256 "704b84f7c7444d4372cb59cca6e1209df4ef3b033bc4ee3cf50f369bce972a9d"
   end
 
   patch do
     url "https://bitbucket.org/petsc/pkg-parmetis/commits/1c1a9fd0f408dc4d42c57f5c3ee6ace411eb222b/raw/"
-    sha256 "11b909a346f4dd8ec73b17ecb0c7215524e3793e252c749bb3199e83fa294597"
+    sha256 "4f892531eb0a807eb1b82e683a416d3e35154a455274cf9b162fb02054d11a5b"
   end
 
   def install
@@ -61,3 +62,17 @@ index ca945dd..1bf94e9 100644
  add_subdirectory(include)
  add_subdirectory(libparmetis)
  add_subdirectory(programs)
+
+diff --git a/libparmetis/CMakeLists.txt b/libparmetis/CMakeLists.txt
+index 9cfc8a7..dfc0125 100644
+--- a/libparmetis/CMakeLists.txt
++++ b/libparmetis/CMakeLists.txt
+@@ -5,7 +5,7 @@ file(GLOB parmetis_sources *.c)
+ # Create libparmetis
+ add_library(parmetis ${ParMETIS_LIBRARY_TYPE} ${parmetis_sources})
+ # Link with metis and MPI libraries.
+-target_link_libraries(parmetis metis ${MPI_LIBRARIES})
++target_link_libraries(parmetis metis ${MPI_LIBRARIES} "-lm")
+ set_target_properties(parmetis PROPERTIES LINK_FLAGS "${MPI_LINK_FLAGS}")
+
+ install(TARGETS parmetis

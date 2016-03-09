@@ -4,39 +4,32 @@ class Nanopolish < Formula
   # doi "10.1038/nmeth.3444"
   # tag "bioinformatics"
 
-  # Does not include htslib nor fast5.
-  # url "https://github.com/jts/nanopolish/archive/v0.3.0.tar.gz"
   url "https://github.com/jts/nanopolish.git",
-    :tag => "v0.3.0", :revision => "832b678d88e26379887c1f123a4e92fb1b074470"
+    :tag => "v0.4.0",
+    :revision => "28bcaa3ea9de8394441c0ceac5b96cf409015a10"
   head "https://github.com/jts/nanopolish.git"
-  revision 1
 
   bottle do
     cellar :any
-    sha256 "dab598f322332ce9ba53fbeb5931445dc4d831fd4407d8be89d95ef62d0e3f95" => :el_capitan
-    sha256 "0653aa2cf44c4cd880d101f002dba7ccd2fb73fec4b0f4619df983deaeb32d44" => :yosemite
-    sha256 "a701637042df3b4ec2d8f5b9f439e373d2cb6f9797e2c548b51a29faca10c915" => :mavericks
+    sha256 "1c549b3531199a61f5d3614a81249c9ddc7971a4b82db3f32047283e5f44da78" => :el_capitan
+    sha256 "7ece6dfcee6cbce122e77df08d45839a8ecc5fc8fd6fa7e69ea4c6adc4aa5d27" => :yosemite
+    sha256 "80756bb5bccf558984a0b8153a687e07f97c845a13cc2d8bc8d890698895f76d" => :mavericks
   end
 
   needs :cxx11
   needs :openmp
 
   depends_on "hdf5"
-  depends_on "htslib"
 
   def install
-    # Fix error: ld: library not found for -lrt
-    inreplace "Makefile", "-lrt", "" if OS.mac?
+    system "make", "HDF5=#{Formula["hdf5"].opt_prefix}"
 
-    system "make", "-C", "htslib"
-    system "make"
-
-    prefix.install "consensus.make", "nanopolish", Dir["*.pl"], Dir["*.py"]
+    prefix.install "scripts", "nanopolish"
     bin.install_symlink "../nanopolish"
     doc.install "LICENSE", "README.md"
   end
 
   test do
-    system "#{bin}/nanopolish", "--help"
+    `#{bin}/nanopolish consensus --version`.include?(version.to_s)
   end
 end

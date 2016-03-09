@@ -1,14 +1,14 @@
 class Nip2 < Formula
   desc "A GUI for the VIPS image processing system"
   homepage "http://www.vips.ecs.soton.ac.uk/"
-  url "http://www.vips.ecs.soton.ac.uk/supported/7.42/nip2-7.42.1.tar.gz"
-  sha256 "541e95a4a8bb3f8ee850035c6beb8a67fe7e174df6c58032fa99ebaf80f58e92"
+  url "http://www.vips.ecs.soton.ac.uk/supported/8.2/nip2-8.2.tar.gz"
+  sha256 "18151e2185eb9db60196d98354ef751eb55ea9d3b55ef090f4a039125d465fca"
 
   bottle do
     cellar :any
-    sha256 "66ee4db4daa9331151ccda266527f0f34fc4ab3bc650bf6f6b8b2c735fa23798" => :yosemite
-    sha256 "4f5b965c6fa470f39c46b870a1cfca5db9f4a37840873b1c17008b784ecbb646" => :mavericks
-    sha256 "fd8632028e5e781aaac730defea585a2b78ff1afb1aaa14dde1df38851716db7" => :mountain_lion
+    sha256 "20d379cce240bb99db2e40a8ba8158daa804c9f6f9b7ca0f653ca7f99b903c06" => :el_capitan
+    sha256 "9aedd3b2ea45252cccd768c4a00dcc72017a0033d96954b1bc6f7d6f198f3323" => :yosemite
+    sha256 "651eb4cd587a533590a38cf068f64c86c7504fa9b32df93148874bb7eef3931d" => :mavericks
   end
 
   option "with-check", "Enable build-time checking"

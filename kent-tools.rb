@@ -1,15 +1,15 @@
 class KentTools < Formula
   desc "Utilities for the UCSC Genome Browser"
   homepage "http://genome.ucsc.edu/"
-  url "http://hgdownload.cse.ucsc.edu/admin/exe/userApps.v316.src.tgz"
+  url "http://hgdownload.soe.ucsc.edu/admin/exe/userApps.v327.src.tgz"
+  sha256 "08d4650ef56b4a927a773d99a4c0532dcb25c1b345367e2d37529705808f55cf"
   head "git://genome-source.cse.ucsc.edu/kent.git"
-  sha256 "1190e52702ff2661ac48fe4f0ef9f966718f44ec09596a6f77c8049c638a59fe"
 
   bottle do
     cellar :any
-    sha256 "9c5e426ee9255fe8a04ac510e52e8e1830ed5657d99ec2a9dae25eb90c1308d8" => :yosemite
-    sha256 "6f869c09ee9c3a33bf8f69b75dfefaa456346879104268b26e4f9057a1276db5" => :mavericks
-    sha256 "29cd9e14a04bb59dafe8c87a3d9e96f19cabcef98118eaba5c04ca66bd6dae4b" => :mountain_lion
+    sha256 "75a15c558cbbfbf3aa6a3309e94eb8ae30beb17742e7243ea185ca1f97f595e8" => :el_capitan
+    sha256 "11702a6c3f3c9886c602d4e05406040b638e1ebf719bf8306e96e83fa925ab9a" => :yosemite
+    sha256 "080ffeffb96e3f3d7c4d73e03ae9d55c9c37eda57adc012345c04fb0004ea297" => :mavericks
   end
 
   depends_on :mysql
@@ -22,7 +22,7 @@ class KentTools < Formula
 
     args = ["userApps", "BINDIR=#{bin}", "SCRIPTS=#{bin}"]
     args << "MACHTYPE=#{`uname -m`.chomp}"
-    args << "PNGLIB=-L#{libpng.opt_lib} -lpng"
+    args << "PNGLIB=-L#{libpng.opt_lib} -lpng -lz"
     args << "PNGINCL=-I#{libpng.opt_include}"
 
     # On Linux, depends_on :mysql looks at system MySQL so check if Homebrew

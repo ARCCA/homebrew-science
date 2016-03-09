@@ -5,19 +5,22 @@ class GmshSvnStrategy < SubversionDownloadStrategy
 end
 
 class Gmsh < Formula
-  desc "Gmsh is a 3D grid generator with a build-in CAD engine."
+  desc "3D finite element grid generator with a build-in CAD engine and post-processor"
   homepage "http://geuz.org/gmsh"
-  url "http://geuz.org/gmsh/src/gmsh-2.10.1-source.tgz"
-  sha256 "a47f15541db038c9cb00f004d13c5648a46c3d8ebd6e0bf3b56f9274e13f505d"
+  url "http://geuz.org/gmsh/src/gmsh-2.11.0-source.tgz"
+  sha256 "2b6d810cc3817ac2c7f5fdd09b9f4b1ed7b93365f6e6574052c73db957a497c6"
 
   head "https://geuz.org/svn/gmsh/trunk", :using => GmshSvnStrategy
 
   bottle do
     cellar :any
-    sha256 "65d05d677a3ab929ad126f6c93c9ddfb70b8be32995ce68c6920178f8359ca76" => :el_capitan
-    sha256 "b039831f02f123a2cb39de1055e345dc8465483396f0d10284a9d5aa4796a46b" => :yosemite
-    sha256 "8faf0079b79a7b1690154aa6df8ba8c25bf007a7ddb26bbb09b34a069814c2ee" => :mavericks
+    sha256 "0d1b49dc46a325fa08f682b3be95a241627c991d6faaffa75ff432c1ca8eb9d4" => :el_capitan
+    sha256 "08b7f89820901b981447cb044a9e260a0b9f366d3de6d5b0d45cdb185856c99a" => :yosemite
+    sha256 "59c30602dd36244d9ad5c71f90289f2eeb6b7e3ed37bafee28d03a244e5b35ac" => :mavericks
   end
+
+  option "with-oce",               "Build with oce support (conflicts with opencascade)"
+  option "without-opencascade",    "Build without opencascade support"
 
   depends_on :fortran
   depends_on :mpi => [:cc, :cxx, :f90, :recommended]
@@ -26,9 +29,6 @@ class Gmsh < Formula
   depends_on "slepc" => :optional
   depends_on "fltk" => :optional
   depends_on "cairo" if build.with? "fltk"
-
-  option "with-oce",               "Build with oce support (conflicts with opencascade)"
-  option "without-opencascade",    "Build without opencascade support"
 
   if build.with?("opencascade") && build.with?("oce")
     odie "gmsh: --without-opencascade must be specified when using --with-oce"

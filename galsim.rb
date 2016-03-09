@@ -28,7 +28,7 @@ class Galsim < Formula
             "FFTW_DIR=#{Formula["fftw"].opt_prefix}",
             "TMV_DIR=#{Formula["tmv-cpp"].opt_prefix}",
             "TMV_LINK=#{Formula["tmv-cpp"].opt_share}/tmv/tmv-link",
-            "EXTRA_LIB_PATH=#{Formula["boost-python"].opt_lib}"
+            "EXTRA_LIB_PATH=#{Formula["boost-python"].opt_lib}",
            ]
     if build.with? "openmp"
       if ENV.compiler == :clang
@@ -43,10 +43,10 @@ class Galsim < Formula
   end
 
   def caveats; <<-EOS.undent
-    The GalSim installer may warn you that #{lib}/python isn't in your python
+    The GalSim installer may warn you that #{lib}/python#{pyver} isn't in your python
     search path. You may want to add all Homebrew python packages to the
     default paths by running:
-       sudo bash -c 'echo \"/usr/local/lib/python\" >> \\\\
+       sudo bash -c 'echo \"#{lib}/python#{pyver}\" >> \\\\
          /Library/Python/#{pyver}/site-packages/homebrew.pth'
     EOS
   end

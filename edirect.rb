@@ -1,16 +1,16 @@
 class Edirect < Formula
   homepage "http://www.ncbi.nlm.nih.gov/books/NBK179288/"
-  #tag "bioinformatics"
+  # tag "bioinformatics"
 
   url "ftp://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/edirect.tar.gz"
-  sha1 "45578de2ae034960dd65a9fc0fbcb81ffdb0898c"
-  version "2.00"
+  sha256 "2d108d780cef39bc4fdfd265d97ebaafe59ec937667061f54274f17a40a1a74f"
+  version "3.60"
 
   bottle do
-    cellar :any
-    sha1 "2db4443d1cf282114efd531e878d6a83c4c93b2d" => :yosemite
-    sha1 "448f84d3ea4fa58bb5cc2bbd46510cdaab06e6fb" => :mavericks
-    sha1 "a3cd5b4533dc11920729f2270e5497eddeeb66a1" => :mountain_lion
+    cellar :any_skip_relocation
+    sha256 "2ce62b8ffb5735b8155c701080c8e8436783b37f284544020bb28430cf4c2f55" => :el_capitan
+    sha256 "ecb86895b52fa5d77aca9868a3c1a303bd86a37d701cb01cb283417ba1fb3217" => :yosemite
+    sha256 "205623c6f64a0c761a10c825249a9a0db6627d5bd6f8c6b7cfc2f822bfa8c81a" => :mavericks
   end
 
   def install

@@ -3,13 +3,14 @@ class Dealii < Formula
   homepage "http://www.dealii.org"
   url "https://github.com/dealii/dealii/releases/download/v8.3.0/dealii-8.3.0.tar.gz"
   sha256 "4ddf72632eb501e1c814e299f32fc04fd680d6fda9daff58be4209e400e41779"
-  revision 1
+  revision 2
 
   bottle do
     cellar :any
-    sha256 "2b194b50ae1648f1c869a639cca60ff6e1976f7e734efd0580afb0967cabaf10" => :el_capitan
-    sha256 "32907efdf770f4aaf4d519bb8682c9e0e25379edb6b9e735f8f5e4de6866a0f6" => :yosemite
-    sha256 "4de1c4e2db3bd4fe4195851f6e3f52e2f8959c52d5832e4633c896ff0d47dd51" => :mavericks
+    revision 1
+    sha256 "8e6d80fb2056830542a11449104d7aea24a848b9eafe37a3b52689671a1724e6" => :el_capitan
+    sha256 "36a242efaa84240e6fc934cc361ec005f1b18ef1b08a41266c9b715f7efc1f07" => :yosemite
+    sha256 "ee59dbb333c28645f994ab08e42ba166a9ff2198db4df865c204d4cede554b12" => :mavericks
   end
 
   head do
@@ -18,7 +19,7 @@ class Dealii < Formula
 
   option "with-testsuite", "Run full test suite (7000+ tests). Takes a lot of time."
 
-  depends_on "cmake"        => :build
+  depends_on "cmake"        => :run
   depends_on :mpi           => [:cc, :cxx, :f90, :recommended]
   depends_on "openblas"     => :optional
 
@@ -59,7 +60,7 @@ class Dealii < Formula
     args << "-DDEAL_II_COMPONENT_DOCUMENTATION=ON" if build.with? "doxygen"
 
     if build.with? "openblas"
-      ext = OS.mac? ? "dyld" : "so"
+      ext = OS.mac? ? "dylib" : "so"
       args << "-DLAPACK_FOUND=true"
       args << "-DLAPACK_INCLUDE_DIRS=#{Formula["openblas"].opt_include}"
       args << "-DLAPACK_LIBRARIES=#{Formula["openblas"].opt_lib}/libopenblas.#{ext}"
@@ -100,6 +101,59 @@ class Dealii < Formula
         system "ctest", "-j", Hardware::CPU.cores
       end
       system "make", "install"
+    end
+  end
+
+  test do
+    # take bare-bones step-3
+    ohai "running step-3:"
+    cp_r prefix/"examples/step-3", testpath
+    cd "step-3" do
+      system "cmake", "."
+      system "make", "release"
+      system "make", "run"
+    end
+    # take step-40 which can use both PETSc and Trilinos
+    cp_r prefix/"examples/step-40", testpath
+    if (build.with? "petsc") && (build.with? "trilinos")
+      ohai "running step-40:"
+      cd "step-40" do
+        system "cmake", "."
+        system "make", "release"
+        if build.with? "mpi"
+          system "mpirun", "-np", Hardware::CPU.cores, "step-40"
+        else
+          system "make", "run"
+        end
+        # change to Trilinos
+        inreplace "step-40.cc", "#define USE_PETSC_LA", "//#define USE_PETSC_LA"
+        system "make", "release"
+        if build.with? "mpi"
+          system "mpirun", "-np", Hardware::CPU.cores, "step-40"
+        else
+          system "make", "run"
+        end
+      end
+    end
+    # take step-36 which uses SLEPc
+    if build.with? "slepc"
+      ohai "running step-36:"
+      cp_r prefix/"examples/step-36", testpath
+      cd "step-36" do
+        system "cmake", "."
+        system "make", "release"
+        system "make", "run"
+      end
+    end
+    # take step-54 to check opencascade
+    if build.with? "opencascade"
+      ohai "running step-54:"
+      cp_r prefix/"examples/step-54", testpath
+      cd "step-54" do
+        system "cmake", "."
+        system "make", "release"
+        system "make", "run"
+      end
     end
   end
 end

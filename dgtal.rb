@@ -1,14 +1,15 @@
 class Dgtal < Formula
-  homepage "http://libdgtal.org"
-  url "http://liris.cnrs.fr/dgtal/releases/DGtal-0.8.0-Source.tar.gz"
-  sha1 "61c8d4b7db2c31daed9456ab65b0158d0a0e1bab"
+  desc "Digital Geometry Tools and Algorithms Library (DGtal) is a toolkit to perform topology and geometry processing on (grid-based) digital data."
+  homepage "http://dgtal.org"
+  url "http://liris.cnrs.fr/dgtal/releases/DGtal-0.9.1-Source.tar.gz"
+  sha256 "9969eee23f0542d94f1a3f39b55665010baada65496223d671998f2c3eefb007"
   head "https://github.com/DGtal-team/DGtal.git"
 
   bottle do
-    revision 1
-    sha256 "3a315b3392ba9c91b69cfa30b6bd7fa7d9673c6b511aae64bcd69fb521d6ff7c" => :yosemite
-    sha256 "7d7045432737c74713a2948892c9fefa2225270189db6bc50232a08de522158d" => :mavericks
-    sha256 "f64ac070e869e50ff2593d72b7f6f291c0eb25e6f7d31bdfc41d582515e708bb" => :mountain_lion
+    cellar :any
+    sha256 "7fa1daca7de12c2734d4774d39a140b15afb890346172d8c5c01afe294de516b" => :el_capitan
+    sha256 "da11c4acc1575ef5da06bd2f29e54902e4ba7bf6c70f099215651eb16935e792" => :yosemite
+    sha256 "8f925cd6f43885f2035e06279a092f744ae6728172381363bdb22f63f6b29f57" => :mavericks
   end
 
   depends_on "cmake" => :build
@@ -24,18 +25,6 @@ class Dgtal < Formula
 
   deprecated_option "with-magick" => "with-graphicsmagick"
   deprecated_option "with-qglviewer" => "with-libqglviewer"
-
-  # Bugfix for boost 1.57: https://github.com/DGtal-team/DGtal/issues/938
-  patch do
-    url "https://github.com/dcoeurjo/DGtal/commit/c676dc82d8d959377622a61ceab6354bab7a2baa.diff"
-    sha1 "ef878791a0e31a006f88ea4366344108bf2a4db8"
-  end
-
-  # Bugfix for libqglviewer discovery: https://github.com/DGtal-team/DGtal/issues/974
-  patch do
-    url "https://github.com/dcoeurjo/DGtal/commit/53f2f9621bcc3c2ae2aa19b65d1864a76fde61c9.diff"
-    sha1 "0fdb663defba542d63aec319def100a74f3b7a98"
-  end
 
   needs :cxx11
 
@@ -56,7 +45,7 @@ class Dgtal < Formula
     mkdir "build" do
       system "cmake", "..", *args
       system "make"
-      system "make",  "install"
+      system "make", "install"
     end
   end
 end

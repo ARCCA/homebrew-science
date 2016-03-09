@@ -4,13 +4,13 @@ class Poretools < Formula
   url "https://github.com/arq5x/poretools/archive/v0.5.1.tar.gz"
   sha256 "7cd55a8f30290992dcf8d7792401e7f21efadfde02b3f4604d6680d2f8300479"
   head "https://github.com/arq5x/poretools.git"
-  revision 1
+  revision 3
 
   bottle do
     cellar :any
-    sha256 "294c23b59f54d35c148cce0a8cbf80cd6d1d250cc1cf991ab75dbde71c2528bf" => :el_capitan
-    sha256 "ade80027fd7f8356d17bef508547ffb6094c834b6ca64baa42b65ea92a76a27a" => :yosemite
-    sha256 "a94ff38359977a0f509ea29d920cd9cd9ef75a0ca3085653d0080c859695ec94" => :mavericks
+    sha256 "a0e632afa59f9be087ea5d35832b8bbdbcb35e13ede286326e78282e9e399c3e" => :el_capitan
+    sha256 "347d5a4eed5444abedb9988321d772f801b810b9bb13c4e61fffb3850b538547" => :yosemite
+    sha256 "791c1099beb63cec062399e8fb8f384688c018a3a7224d33d302220568b26d18" => :mavericks
   end
 
   depends_on "hdf5"
@@ -74,7 +74,7 @@ class Poretools < Formula
   end
 
   resource "ggplot2" do
-    url "http://cran.r-project.org/src/contrib/ggplot2_1.0.1.tar.gz"
+    url "https://cran.r-project.org/src/contrib/Archive/ggplot2/ggplot2_1.0.1.tar.gz"
     sha256 "40248e6b31307787e44e45d806e7a33095844a9bbe864cc7583dd311b19c241d"
   end
 

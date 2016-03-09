@@ -1,30 +1,29 @@
-require 'formula'
-
 class H5utils < Formula
-  homepage 'http://ab-initio.mit.edu/wiki/index.php/H5utils'
-  url 'http://ab-initio.mit.edu/h5utils/h5utils-1.12.1.tar.gz'
-  sha1 '1bd8ef8c50221da35aafb5424de9b5f177250d2d'
-  revision 2
+  desc "Utilities to work with scientific data in HDF5"
+  homepage "http://ab-initio.mit.edu/wiki/index.php/H5utils"
+  url "http://ab-initio.mit.edu/h5utils/h5utils-1.12.1.tar.gz"
+  sha256 "7290290ca5d5d4451d757a70c86baaa70d23a28edb09c951b6b77c22b924a38d"
+  revision 3
 
   bottle do
-    sha256 "b77085fa8a924749a6d9dee2b8319a00d39d5a9d097d1e25c6aad6ade800ed1c" => :el_capitan
-    sha256 "02e68a979c867d08dab3e90ba0f1afab5c7d5ddbf04238e856e1db2584998187" => :yosemite
-    sha256 "f809a9cd94cc8fca03d74deeef9e41994ad1dcd6b304b98169d4e34b62e9500c" => :mavericks
+    sha256 "53e09efdef87074bd12c9aa66ed092d681db3c1438a8541b06f36466240a737e" => :el_capitan
+    sha256 "44beb91faf69855c4484a7f0772f5ed150f20740080c59ea04fd54835faa1df4" => :yosemite
+    sha256 "7ca32452c0351f5593078c270f9d517a3ce318ea3f46ec93b94a0e57d318e91b" => :mavericks
   end
 
   depends_on "libpng"
-  depends_on 'hdf5'
+  depends_on "hdf5"
 
   # A patch is required in order to build h5utils with libpng 1.5
   patch :p0 do
     url "https://trac.macports.org/export/102291/trunk/dports/science/h5utils/files/patch-writepng.c"
-    sha1 "026aa59f2e13388d0b7834de6dcbd48da2858cbe"
+    sha256 "b8737b5e4cd6597570b39ce911ffea5bd0173e0e7a6b32620df188b2d260280f"
   end
 
   def install
     system "./configure", "--disable-debug", "--disable-dependency-tracking",
                           "--prefix=#{prefix}",
                           "--without-octave"
-    system "make install"
+    system "make", "install"
   end
 end

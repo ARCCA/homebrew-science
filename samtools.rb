@@ -1,18 +1,19 @@
 class Samtools < Formula
+  desc "Tools (written in C using htslib) for manipulating next-generation sequencing data"
   homepage "http://www.htslib.org/"
   # doi "10.1093/bioinformatics/btp352"
   # tag "bioinformatics"
 
-  url "https://github.com/samtools/samtools/archive/1.2.tar.gz"
-  sha1 "9fabb4903b9d1521aeea8a5538e64aefe8e85526"
+  url "https://github.com/samtools/samtools/releases/download/1.3/samtools-1.3.tar.bz2"
+  sha256 "beea4003c795a0a25224656815b4036f6864b8753053ed30c590bb052b70b60e"
 
   head "https://github.com/samtools/samtools.git"
 
   bottle do
     cellar :any
-    sha1 "de1ad3b2b528b175bdfcf0e78ac923da8187c7de" => :yosemite
-    sha1 "37fca3fb8113838ae9178c2fc17043e9e3e42791" => :mavericks
-    sha1 "e4d41de74cd32b2d88519e16f08abad025955582" => :mountain_lion
+    sha256 "c6bb8308c4ffb995ca46ac6be8e7087c22e7e2dd6bdb801690802b2d4f089a52" => :el_capitan
+    sha256 "97447111d3ab5dce204761395afd600060ba36c8b47045a65a33b8efd10c4bb6" => :yosemite
+    sha256 "c6baa6fc3f29cdb96a9fdf59f832455f4dd2c6ed25801d4a09f6e8cb9c810b98" => :mavericks
   end
 
   option "with-dwgsim", "Build with Whole Genome Simulation"
@@ -22,24 +23,22 @@ class Samtools < Formula
   depends_on "dwgsim" => :optional
 
   def install
+    htslib = Formula["htslib"].opt_prefix
     if build.without? "curses"
       ohai "Building without curses"
-      inreplace "Makefile" do |s|
-        s.gsub! "-D_CURSES_LIB=1", "-D_CURSES_LIB=0"
-        s.gsub! "-lcurses", "# -lcurses"
-      end
+      system "./configure", "--with-htslib=#{htslib}", "--without-curses"
+    else
+      system "./configure", "--with-htslib=#{htslib}"
     end
 
-    inreplace "Makefile", "include $(HTSDIR)/htslib.mk", ""
-    htslib = Formula["htslib"].opt_prefix
-    system "make", "HTSDIR=#{htslib}/include", "HTSLIB=#{htslib}/lib/libhts.a"
+    system "make"
 
     bin.install "samtools"
-    bin.install %w{misc/maq2sam-long misc/maq2sam-short misc/md5fa misc/md5sum-lite misc/wgsim}
+    bin.install %w[misc/maq2sam-long misc/maq2sam-short misc/md5fa misc/md5sum-lite misc/wgsim]
     bin.install Dir["misc/*.pl"]
     lib.install "libbam.a"
-    man1.install %w{samtools.1}
-    (share+"samtools").install %w{examples}
+    man1.install %w[samtools.1]
+    (share+"samtools").install %w[examples]
     (include+"bam").install Dir["*.h"]
   end
 

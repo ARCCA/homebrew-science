@@ -1,15 +1,15 @@
 class Alpscore < Formula
   desc "Applications and Libraries for Physics Simulations"
   homepage "http://alpscore.org"
-  url "https://github.com/ALPSCore/ALPSCore/archive/v0.5.tar.gz"
-  sha256 "05fa4bc65eba8f2e09ef89907ed5763aa775289654ea324a25d403836a1cbb28"
+  url "https://github.com/ALPSCore/ALPSCore/archive/v0.5.3.tar.gz"
+  sha256 "87841b96e13d93f863b92daeeba06a562329b80f9e651694901dcf061327d538"
   head "https://github.com/ALPSCore/ALPSCore.git"
 
   bottle do
     cellar :any
-    sha256 "ca3718cf06979245642bf7480b4b0dbdb756ed7b0f02885fd37a3f9b2bccae8c" => :el_capitan
-    sha256 "5eabcd012359f7b817e880c84ddd8b6e6ed71e449a6c8c241bf035efc9ecf4d6" => :yosemite
-    sha256 "7429a356163589a99f123f3200dfd0e234cdf46a83827fa3c24f767a0c1e99a9" => :mavericks
+    sha256 "933fee39d392c6de4176244ea92e5f4937157fa01893ba643a29bded50e6caaf" => :el_capitan
+    sha256 "e679dcc5dd2064daec7cd0c87e99dde14cdbf1a2aeb368503e093d2f460c1008" => :yosemite
+    sha256 "c4341da2fc657191965a11dc0cb06e8ca151399e6dbed5c7fc5cbc0cfacf2d49" => :mavericks
   end
 
   option :cxx11
@@ -21,7 +21,6 @@ class Alpscore < Formula
   depends_on :mpi => [:cc, :cxx, :recommended]
 
   boost_options = []
-  boost_options += ["with-mpi", "without-single"] if build.with? "mpi"
   boost_options << "c++11" if build.cxx11?
   depends_on "boost" => boost_options
 
@@ -74,9 +73,8 @@ class Alpscore < Formula
     EOS
     args_compile = ["test.cpp",
                     "-lalps-accumulators", "-lalps-hdf5", "-lalps-utilities", "-lalps-params",
-                    "-lboost_filesystem-mt", "-lboost_system-mt", "-lboost_program_options-mt",
+                    "-lboost_filesystem-mt", "-lboost_system-mt", "-lboost_program_options-mt"
                    ]
-    args_compile << "-lboost_mpi-mt" if build.with? "mpi"
     args_compile << "-o" << "test"
     system ((build.with? "mpi") ? "mpicxx" : ENV.cxx), *args_compile
     system "./test"

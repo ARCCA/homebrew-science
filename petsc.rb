@@ -1,20 +1,21 @@
 class Petsc < Formula
   desc "Scalable (parallel) solution of scientific applications modeled by partial differential equations"
   homepage "http://www.mcs.anl.gov/petsc/index.html"
-  url "http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-3.6.1.tar.gz"
-  sha256 "aeac101565a4ba609c3f3f13ada475720bcd32a44676e3cbfe792da1c9fb32a2"
+  url "http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-3.6.3.tar.gz"
+  sha256 "2458956c876496f3c8160591324459be7c11f2e1ce09ad98347394c67a46d858"
   head "https://bitbucket.org/petsc/petsc", :using => :git
-  revision 5
+  revision 3
 
   bottle do
-    sha256 "9b4a295bc1e19fab3f862a8c97c2971062771f9dd11e16a045812c61c0c8d767" => :el_capitan
-    sha256 "452555dbc2c83c49821d927546df11fa8e4b866be1587ff8e13b27abae486bad" => :yosemite
-    sha256 "ca64ef3356204fd2d7e9e80ef487d94ce612a481324f92756f8cc0f0713b89ec" => :mavericks
+    sha256 "2f00d5c898acd34e98b8b359a1aa797a98666ae040994413f5425c244727f401" => :el_capitan
+    sha256 "0daf0ef19952a383941bb7d1a4caf9d2ddb74123cfcf1becf04f3d6690cede07" => :yosemite
+    sha256 "461d7e0e38818002777c9b505edcdda21de06e81db14d6bd4eca99b6e764395d" => :mavericks
   end
 
   option "without-check", "Skip build-time tests (not recommended)"
   option "with-complex", "Link complex version of PETSc by default."
   option "with-debug", "Build debug version"
+  option "with-ml", "Download and build ML (will not symlink if Trilinos is installed)"
 
   deprecated_option "complex" => "with-complex"
   deprecated_option "debug"   => "with-debug"
@@ -41,7 +42,7 @@ class Petsc < Formula
   depends_on "netcdf"       => ["with-fortran", :recommended]
   depends_on "fftw"         => ["with-mpi", "with-fortran", :recommended]
 
-  # TODO: add ML, YAML dependencies when the formulae are available
+  # TODO: YAML dependencies when the formulae are available
 
   def oprefix(f)
     Formula[f].opt_prefix
@@ -58,11 +59,14 @@ class Petsc < Formula
     ENV.delete "CXX"
     ENV.delete "F77"
     ENV.delete "FC"
+    # PETSc is not threadsafe, disable pthread/openmp (see http://www.mcs.anl.gov/petsc/miscellaneous/petscthreads.html)
     args = %W[CC=#{ENV["MPICC"]}
               CXX=#{ENV["MPICXX"]}
               F77=#{ENV["MPIF77"]}
               FC=#{ENV["MPIFC"]}
               --with-shared-libraries=1
+              --with-pthread=0
+              --with-openmp=0
            ]
     args << ("--with-debugging=" + ((build.with? "debug") ? "1" : "0"))
 
@@ -88,7 +92,7 @@ class Petsc < Formula
     args << "--with-metis-dir=#{oprefix("metis")}" if build.with? "metis"
     args << "--with-parmetis-dir=#{oprefix("parmetis")}" if build.with? "parmetis"
     args << "--with-scalapack-dir=#{oprefix("scalapack")}" if build.with? "scalapack"
-    args << "--with-mumps-dir=#{oprefix("mumps")}" if build.with? "mumps"
+    args << "--with-mumps-dir=#{oprefix("mumps")}/libexec" if build.with? "mumps"
     args << "--with-x=0" if build.without? "x11"
 
     # if build with openblas, need to provide lapack as well.
@@ -106,6 +110,9 @@ class Petsc < Formula
     args_real = ["--prefix=#{prefix}/#{arch_real}",
                  "--with-scalar-type=real",
                 ]
+    # TODO: compile separately (https://bitbucket.org/petsc/pkg-ml/commits/tag/v6.2-p3)
+    # --with-ml-include=/path/to/ml/include --with-ml-lib=/path/to/ml/liblibml.a
+    args_real << "--download-ml=1" if build.with? "ml"
     args_real << "--with-hypre-dir=#{oprefix("hypre")}" if build.with? "hypre"
     args_real << "--with-sundials-dir=#{oprefix("sundials")}" if build.with? "sundials"
     args_real << "--with-hwloc-dir=#{oprefix("hwloc")}" if build.with? "hwloc"
@@ -140,10 +147,12 @@ class Petsc < Formula
     include.install_symlink Dir["#{prefix}/#{petsc_arch}/include/*h"],
                                 "#{prefix}/#{petsc_arch}/include/finclude",
                                 "#{prefix}/#{petsc_arch}/include/petsc-private"
-    prefix.install_symlink "#{prefix}/#{petsc_arch}/conf"
     # symlink only files (don't symlink pkgconfig as it won't symlink to opt/lib)
     lib.install_symlink Dir["#{prefix}/#{petsc_arch}/lib/*.*"]
     pkgshare.install_symlink Dir["#{prefix}/#{petsc_arch}/share/*"]
+
+    # change install name to ABI in opt
+    system "install_name_tool", "-id", "#{opt_prefix}/lib/libpetsc.3.6.dylib", "#{prefix}/#{petsc_arch}/lib/libpetsc.3.6.3.dylib" if OS.mac?
   end
 
   def caveats; <<-EOS

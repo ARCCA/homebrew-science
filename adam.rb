@@ -1,14 +1,14 @@
 class Adam < Formula
   desc "Genomics analysis platform with specialized file formats built using Apache Avro, Apache Spark and Parquet"
   homepage "https://github.com/bigdatagenomics/adam"
-  url "https://repo1.maven.org/maven2/org/bdgenomics/adam/adam-distribution_2.10/0.17.1/adam-distribution_2.10-0.17.1-bin.tar.gz"
-  sha256 "30ec40d43e8f2e0ac0690056e2437f2a4af4fad9033f1e41021898b65fa2d986"
+  url "https://repo1.maven.org/maven2/org/bdgenomics/adam/adam-distribution_2.10/0.19.0/adam-distribution_2.10-0.19.0-bin.tar.gz"
+  sha256 "9010b198e8fc38de24030a2d00ae86351a6a3af2a3f62b3d21251648e3d60524"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "fd710b911bf60d3ec091531dc7c2b44d0ea4d9e814d24382ed74e82c84ffa3d2" => :yosemite
-    sha256 "d044b5c388ec3a7d583657bf84d8b9da1b42b7a7aaaf9ff437f48d0ccdf960f7" => :mavericks
-    sha256 "8d2d9899d83308a4187b3a2f015f07b73ddf67266c4424ad9b0312a034910833" => :mountain_lion
+    sha256 "3bf8b2311b906535fca1048cfd64fd162b7d2d791a7814adc5d70ed7171b95fe" => :el_capitan
+    sha256 "81b36880cc06e0822939358cfa631dae809cd632846e92b7e74d34a38d94a613" => :yosemite
+    sha256 "a4cc0fae830a47294b6d83741cbbd5248c3707af8f8a56c418b886c66941424e" => :mavericks
   end
 
   depends_on "apache-spark"
@@ -29,11 +29,10 @@ class Adam < Formula
     else
       libexec.install Dir["*"]
     end
-    rm "#{libexec}/bin/adam.bat"
     bin.write_exec_script Dir["#{libexec}/bin/*"]
   end
 
   test do
-    system "#{bin}/adam-submit", "buildinfo"
+    system "#{bin}/adam-submit", "--version"
   end
 end

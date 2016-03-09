@@ -4,17 +4,17 @@ class Nextflow < Formula
   # doi "10.6084/m9.figshare.1254958"
   # tag "bioinformatics"
 
-  url "http://www.nextflow.io/releases/v0.16.1/nextflow"
-  version "0.16.1"
-  sha256 "48ca9ac1f3f694478f9de4843c4bddf0a9e26abc2d27f76e6fe1081424c0d8d3"
+  url "http://www.nextflow.io/releases/v0.17.3/nextflow"
+  version "0.17.3"
+  sha256 "05563ee1474fbef22f65fa3080792dcb08d218dd1b1561c517ebff4346559dbe"
 
   head "https://github.com/nextflow-io/nextflow.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "48e884bd04fe3b8ac61f2bcd069cdab5be6546562019ae0c6d54d121194995e1" => :el_capitan
-    sha256 "a950bd93fe432651a37e0f66533f0707fecd69572610ffd0b010e29851d14595" => :yosemite
-    sha256 "2bc99b2a007559b38c51e4f9ccc98db412fb6c97206b42e4549f9e5a2ab7d9a9" => :mavericks
+    sha256 "87ab47b109b6017f5e72690966e0948286d807eaea700d500a8ed7bfc2c02a60" => :el_capitan
+    sha256 "47b5d6129ad6913ebf11d66dc8a05359a4a53d295cbb82a87f7cba13f8ac6184" => :yosemite
+    sha256 "edd6e7fdf175c5e9add1bb28b560b86cae3d94135d9c2d7388eda40b7b636ed2" => :mavericks
   end
 
   depends_on :java => "1.7+"

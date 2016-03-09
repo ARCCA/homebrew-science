@@ -1,20 +1,26 @@
 class Spades < Formula
   desc "SPAdes: de novo genome assembly"
   homepage "http://bioinf.spbau.ru/spades/"
-  bottle do
-    cellar :any
-    sha256 "9d69a98a442701f818df56325beeb1ddc8457da5932da172706becf18f6d3fed" => :yosemite
-    sha256 "89ff010f4542bb2f63144c642a125fdedee8367a14410bfd3b30c6b27caeb1c9" => :mavericks
-    sha256 "834d20f5a8b812cdb8c1e2b9c36a8baf35b5f6e5d7f3af910350713a3357ae5e" => :mountain_lion
-  end
-
   # tag "bioinformatics"
   # doi "10.1089/cmb.2012.0021"
+  url "http://spades.bioinf.spbau.ru/release3.7.0/SPAdes-3.7.0.tar.gz"
+  sha256 "4d9b114150c4d37084967a5a3264d36a480394996197949fb72402f2d65b42a3"
 
-  url "http://spades.bioinf.spbau.ru/release3.6.0/SPAdes-3.6.0.tar.gz"
-  sha256 "6c04e55d068ad3e5b44c862cb031d41fcd433ab97e5dedadebcc5f785cde13a9"
+  bottle do
+    cellar :any
+    revision 1
+    sha256 "fc88b243e7ef3cdc9c73cc2cbb0620da8a7f90856ca57e551cafd5cd75a15d42" => :el_capitan
+    sha256 "db922b27bda8afe1b992d47de34f96900ccc29efac8e91c9359ca5776bc7f21e" => :yosemite
+    sha256 "12f2f2f6b50d9f142a76fa61a981952601e969dfc7e6ff27cbb1403d3a44682f" => :mavericks
+  end
 
   depends_on "cmake" => :build
+
+  needs :openmp
+
+  fails_with :gcc => "4.7" do
+    cause "Compiling SPAdes requires GCC >= 4.7 for OpenMP 3.1 support"
+  end
 
   def install
     mkdir "src/build" do

@@ -1,19 +1,18 @@
 class Abinit < Formula
+  desc "Atomic-scale first-principles simulation software"
   homepage "http://www.abinit.org"
-  url "http://ftp.abinit.org/abinit-7.10.4.tar.gz"
-  sha256 "ebd0a3abd01db4374beda092d1f16c9e00d327712b1ed389bb32e1c80f37c6ef"
-  revision 1
+  url "http://ftp.abinit.org/abinit-7.10.5.tar.gz"
+  sha256 "e9376a3e34790bce90992f28e5fa8554b51ba467bf5709c7fd25d300e7c4f56a"
 
   bottle do
-    sha256 "404d04486c0f452e622902749c65f0ac594ce2b79eb538d812867d9c31e36233" => :yosemite
-    sha256 "062883bd8b8715966e789142562ba7b0dcb4d31ec8466b3cc71f9559f7826a18" => :mavericks
-    sha256 "4c7548716959b70c9b83ed3bc437c6dd7544b78fa9ff4827a7be78d84592be30" => :mountain_lion
+    cellar :any
+    sha256 "1b8837dc6dd908ad27e3225a849887e28cd9d8ed4464363dc24a7830d53c4a25" => :el_capitan
+    sha256 "241aeffb5599e19d5492c450d3393dd12f6f233c291838d8d80941bb57becf59" => :yosemite
+    sha256 "1dca7b47daa3f5a8420fe44059bbd6e745d4db710047ebca3d31b89f3709b178" => :mavericks
   end
 
   option "without-check", "Skip build-time tests (not recommended)"
   option "with-testsuite", "Run full test suite (time consuming)"
-
-  depends_on "cmake" => :build
 
   depends_on :mpi => [:cc, :cxx, :f77, :f90]
   depends_on :fortran
@@ -48,14 +47,14 @@ class Abinit < Formula
 
     if build.with? "scalapack"
       args << "--with-linalg-flavor=custom+scalapack"
-      args << "--with-linalg-libs=-L#{Formula["veclibfort"].opt_lib} -lveclibfort -L#{Formula["scalapack"].opt_lib} -lscalapack"
+      args << "--with-linalg-libs=-L#{Formula["veclibfort"].opt_lib} -lvecLibFort -L#{Formula["scalapack"].opt_lib} -lscalapack"
     else
       args << "--with-linalg-flavor=custom"
-      args << "--with-linalg-libs=-L#{Formula["veclibfort"].opt_lib} -lveclibfort"
+      args << "--with-linalg-libs=-L#{Formula["veclibfort"].opt_lib} -lvecLibFort"
     end
 
     if build.with? "etsf_io"
-      fail "Building with etsf_io support requires netcdf" if build.without? "netcdf"
+      raise "Building with etsf_io support requires netcdf" if build.without? "netcdf"
       trio_flavor = "netcdf+etsf_io"
       args << "--with-etsf-io-incs=-I#{Formula["etsf_io"].opt_include}"
       args << "--with-etsf-io-libs=-L#{Formula["etsf_io"].opt_lib} -letsf_io_low_level -letsf_io_utils -letsf_io"
@@ -99,7 +98,7 @@ class Abinit < Formula
     if build.with? "check"
       cd "tests"
       if build.with? "testsuite"
-        system "./runtests.py -n 3 2>&1 | tee make-check.log"
+        system "./runtests.py 2>&1 | tee make-check.log"
       else
         system "./runtests.py built-in fast 2>&1 | tee make-check.log"
       end

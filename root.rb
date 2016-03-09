@@ -1,15 +1,16 @@
 class Root < Formula
-  desc "Root object oriented framework for large scale data analysis"
+  desc "Object oriented framework for large scale data analysis"
   homepage "http://root.cern.ch"
   version "5.34.34"
+  url "https://root.cern.ch/download/root_v#{version}.source.tar.gz"
   sha256 "8c1faf893ed3b279f3500368b3dcd2087352020a69d3055c4d36726e7f6acd58"
-  url "ftp://root.cern.ch/root/root_v#{version}.source.tar.gz"
+  revision 1
   head "https://github.com/root-mirror/root.git", :branch => "v5-34-00-patches"
 
   bottle do
-    sha256 "2e7d46e13046175804fa9045ba5b63ecb63d073f54e0568b27ef8eed3ac445e6" => :el_capitan
-    sha256 "cccbfc6de1a4c6ba39265c97e94c057297e07f13f898539c1ffd6e07bc047414" => :yosemite
-    sha256 "487019d87436f66c469c6e2e3533a7ec327c4e42bde4c7f8c376021a49e2cbce" => :mavericks
+    sha256 "613f35d0a27605432ad78ccad9569cc4e99e09e2e5be0fe5c4e8df79b20e920e" => :el_capitan
+    sha256 "0ca5c7f65a53ac75c82187bde58f59ecb4167bcfaa399bf7af4672b61e5e4043" => :yosemite
+    sha256 "da95281b991b743e86acf1dc33e50fab813c2d44f0d236884090e25de69207e5" => :mavericks
   end
 
   option "with-qt", "Build with Qt graphics backend and GSI's Qt integration"
@@ -44,6 +45,7 @@ class Root < Formula
       --prefix=#{prefix}
       --etcdir=#{prefix}/etc/root
       --mandir=#{man}
+      --elispdir=#{share}/emacs/site-lisp/#{name}
     ]
 
     args << "--enable-mathmore" if build.with? "gsl"
@@ -72,11 +74,6 @@ class Root < Formula
     mv Dir["#{bin}/*.*sh"], libexec
   end
 
-  test do
-    system "make", "-C", "#{prefix}/test/", "hsimple"
-    system "#{prefix}/test/hsimple"
-  end
-
   def caveats; <<-EOS.undent
     Because ROOT depends on several installation-dependent
     environment variables to function properly, you should
@@ -91,5 +88,20 @@ class Root < Formula
     For csh/tcsh users:
       source `brew --prefix root`/libexec/thisroot.csh
     EOS
+  end
+
+  test do
+    (testpath/"test.C").write <<-EOS.undent
+      #include <iostream>
+      void test() {
+        std::cout << "Hello, world!" << std::endl;
+      }
+    EOS
+    (testpath/"test.bash").write <<-EOS.undent
+      . #{libexec}/thisroot.sh
+      root -l -b -n -q test.C
+    EOS
+    assert_equal "\nProcessing test.C...\nHello, world!\n",
+      `/bin/bash test.bash`
   end
 end

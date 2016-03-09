@@ -5,16 +5,16 @@ class GetdpSvnStrategy < SubversionDownloadStrategy
 end
 
 class Getdp < Formula
-  desc "GetDP is an open source finite element solver using mixed elements."
+  desc "Open source finite element solver using mixed elements."
   homepage "http://www.geuz.org/getdp/"
-  url "http://www.geuz.org/getdp/src/getdp-2.6.1-source.tgz"
-  sha256 "b3722dcde0478b1fba34c3c36820f64b0184cdbe0ef7535e23fb87e1da36e96a"
+  url "http://www.geuz.org/getdp/src/getdp-2.7.0-source.tgz"
+  sha256 "122830b700e4535be3ccba025bad5c7702324639a937b5e79fee6a1e92bd34b2"
   head "https://geuz.org/svn/getdp/trunk", :using => GetdpSvnStrategy
 
   bottle do
-    sha256 "ea70a4a9b01642d281648a85cc9726d80f93f4c7d4e9c6db1597efb571f759fa" => :el_capitan
-    sha256 "43317398bf78feb9122c5cb631b6993286b49f04b8660a7338dbedbbdd584fea" => :yosemite
-    sha256 "34775daaf746679410256c0890a6bfc0563005a8003689a70abd578339ff9a20" => :mavericks
+    sha256 "f85ee7841765fe4f7c1793433422a600b634882f7ab263ba5507e7ada2a88aa0" => :el_capitan
+    sha256 "9e9e0ccfeb81f75e176bbd6b116aa57c83dac8034255d072c5f8d2219fe99074" => :yosemite
+    sha256 "add45ad67c6dfb619c140f01ce7f856d9645102840f86f345ecd63e149c277c4" => :mavericks
   end
 
   option "without-check", "skip build-time tests (not recommended)"

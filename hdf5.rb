@@ -1,14 +1,14 @@
 class Hdf5 < Formula
   desc "File format designed to store large amounts of data"
   homepage "http://www.hdfgroup.org/HDF5"
-  url "http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.15-patch1.tar.bz2"
-  version "1.8.15"
-  sha256 "a5afc630c4443547fff15e9637b5b10404adbed4c00206d89517d32d6668fb32"
+  url "https://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.16/src/hdf5-1.8.16.tar.bz2"
+  sha256 "13aaae5ba10b70749ee1718816a4b4bfead897c2fcb72c24176e759aec4598c6"
+  revision 1
 
   bottle do
-    sha256 "5b021fb5ee7c2c95b091988b0184e109caa6dd33bee61f5478fbb1b431d00cb3" => :el_capitan
-    sha256 "59253092e8b149b463a79e14daf40feb53863fb80c55756413d90f8c056fa0d4" => :yosemite
-    sha256 "eaaa0d43934b3719b51777cd9ed110691e711a9370e60c83552fc965af2f828a" => :mavericks
+    sha256 "3ef70c3ba3d08e2e14f055d9fb3af6368a8cb3d9a825634fb30b83c66d648b1b" => :el_capitan
+    sha256 "1fe2487ac2e3160509cd10c26437c278b9be713fd318a49982aa38d167cb65a7" => :yosemite
+    sha256 "c09c07bff0b22f1838b51f2eb0e70ccf04be903f6b3821fc7d26403f161f4cc5" => :mavericks
   end
 
   deprecated_option "enable-fortran" => "with-fortran"
@@ -23,11 +23,13 @@ class Hdf5 < Formula
   option "with-fortran2003", "Compile Fortran 2003 bindings (requires --with-fortran)"
   option "with-mpi", "Compile with parallel support (unsupported with thread-safety)"
   option "without-cxx", "Disable the C++ interface"
+  option "with-unsupported", "Allow unsupported combinations of configure options"
   option :cxx11
 
   depends_on :fortran => :optional
   depends_on "szip"
   depends_on :mpi => [:optional, :cc, :cxx, :f90]
+  depends_on "zlib" unless OS.mac?
 
   def install
     ENV.universal_binary if build.universal?
@@ -37,15 +39,15 @@ class Hdf5 < Formula
       --enable-production
       --enable-debug=no
       --disable-dependency-tracking
-      --with-zlib=/usr
+      --with-zlib=#{OS.mac? ? "/usr" : Formula["zlib"].opt_prefix}
       --with-szlib=#{Formula["szip"].opt_prefix}
       --enable-static=yes
       --enable-shared=yes
-      --enable-unsupported
     ]
+    args << "--enable-unsupported" if build.with? "unsupported"
     args << "--enable-threadsafe" << "--with-pthread=/usr" if build.with? "threadsafe"
 
-    if build.with? "cxx"
+    if build.with?("cxx") && build.without?("mpi")
       args << "--enable-cxx"
     else
       args << "--disable-cxx"

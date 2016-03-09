@@ -1,14 +1,14 @@
 class Proverif < Formula
   desc "Proverif, cryptographic protocol verifier in the formal model"
   homepage "http://prosecco.gforge.inria.fr/personal/bblanche/proverif"
-  url "http://prosecco.gforge.inria.fr/personal/bblanche/proverif/proverif1.91.tar.gz"
-  sha256 "ea2310199f2814da294572adc58a27edc7e1342a178859badd3cab01ce804ad2"
+  url "http://prosecco.gforge.inria.fr/personal/bblanche/proverif/proverif1.92.tar.gz"
+  sha256 "8c7a83dbe36ed0b5fbecf477d35769a31f8c349950aa40495e69761306048da5"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "3a313fe625cd749542822acfb78343d66c3b37aad14db581ea321625c34804a4" => :el_capitan
-    sha256 "3c7ab465a96998586add43f8863e0024bbb1dab60c88ca881e14eacfa33e30b2" => :yosemite
-    sha256 "43fb3b720d64812fbf9e08b21b86f8ff6b5865a6b50364f1d6637f1b5d92a424" => :mavericks
+    sha256 "f9c1a86d99a32269705b1c00ec4156e2ca051b02de1d7eca9b047c612b5800ca" => :el_capitan
+    sha256 "1d17c42100fd86080e0f07ba9e7c5509a7e27d3188ba637492b9e091a4bfc99a" => :yosemite
+    sha256 "53c51851f8682d7e3f8d47a1990dfcc1ac22a9a6cd59cd14f2bcb6d913352b73" => :mavericks
   end
 
   depends_on "ocaml"

@@ -7,16 +7,15 @@ end
 class R < Formula
   desc "Software environment for statistical computing"
   homepage "http://www.r-project.org/"
-  url "http://cran.rstudio.com/src/base/R-3/R-3.2.2.tar.gz"
-  mirror "http://cran.r-project.org/src/base/R-3/R-3.2.2.tar.gz"
-  sha256 "9c9152e74134b68b0f3a1c7083764adc1cb56fd8336bec003fd0ca550cd2461d"
+  url "http://cran.rstudio.com/src/base/R-3/R-3.2.3.tar.gz"
+  mirror "http://cran.r-project.org/src/base/R-3/R-3.2.3.tar.gz"
+  sha256 "b93b7d878138279234160f007cb9b7f81b8a72c012a15566e9ec5395cfd9b6c1"
   revision 1
 
   bottle do
-    revision 2
-    sha256 "9ae58fe7c951d5bc18c8f20d6567a8c8ec6f19ac5ca8aca676d4d7ec5cb496df" => :el_capitan
-    sha256 "50ff58358f259cc8c5533fa1c8938ad7e01ad2b1f2962e4ba222183cbd066aa1" => :yosemite
-    sha256 "3dbe359ac7dd826d3d666f387026a4e33c93b69652652e2a9c4171ed0600d780" => :mavericks
+    sha256 "7a6ac7211c6013a1ae560345223645d6da7fc336ebda9383bc61f2ebd18f8b1a" => :el_capitan
+    sha256 "c3b6fa268209cccc998aa3efa1eb84877a8f01ba3b6cea5710fd7796db6e8281" => :yosemite
+    sha256 "99ca6e1ae3ff1420eae02d53403ec863fcd2eab002b8d0e17c4cb1d024a2c82a" => :mavericks
   end
 
   head do
@@ -141,8 +140,9 @@ class R < Formula
 
       # make Homebrew packages discoverable for R CMD INSTALL
       inreplace r_home/"etc/Makeconf" do |s|
-        s.gsub! /CPPFLAGS =.*/, "\\0 -I#{HOMEBREW_PREFIX}/include"
-        s.gsub! /LDFLAGS =.*/, "\\0 -L#{HOMEBREW_PREFIX}/lib"
+        s.gsub! /^CPPFLAGS =.*/, "\\0 -I#{HOMEBREW_PREFIX}/include"
+        s.gsub! /^LDFLAGS =.*/, "\\0 -L#{HOMEBREW_PREFIX}/lib"
+        s.gsub! /.LDFLAGS =.*/, "\\0 $(LDFLAGS)"
       end
 
       bash_completion.install resource("completion")
@@ -163,6 +163,7 @@ class R < Formula
   end
 
   def post_install
+    return if build.with?("librmath-only")
     cellar_site_library = r_home/"site-library"
     site_library.mkpath
     cellar_site_library.unlink if cellar_site_library.exist? || cellar_site_library.symlink?
@@ -175,8 +176,8 @@ class R < Formula
         R CMD javareconf JAVA_CPPFLAGS=-I/System/Library/Frameworks/JavaVM.framework/Headers
       If you've installed a version of Java other than the default, you might need to instead use:
         R CMD javareconf JAVA_CPPFLAGS="-I/System/Library/Frameworks/JavaVM.framework/Headers -I/Library/Java/JavaVirtualMachines/jdk<version>.jdk/"
-      (where <version> can be found by running `java -version`, `/usr/libexec/java_home`, or `locate jni.h`), or:
-        R CMD javareconf JAVA_CPPFLAGS="-I/System/Library/Frameworks/JavaVM.framework/Headers -I$(/usr/libexec/java_home | grep -o '.*jdk')"
+      (where <version> can be found by running `java -version`, `/usr/libexec/java#{'_'}home`, or `locate jni.h`), or:
+        R CMD javareconf JAVA_CPPFLAGS="-I/System/Library/Frameworks/JavaVM.framework/Headers -I$(/usr/libexec/java#{'_'}home | grep -o '.*jdk')"
       EOS
     end
   end

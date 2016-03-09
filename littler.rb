@@ -5,12 +5,12 @@ class Littler < Formula
   head "https://github.com/eddelbuettel/littler.git"
   url "http://dirk.eddelbuettel.com/code/littler/littler-0.2.3.tar.gz"
   sha256 "98cd741c68a5c8f65b06c96d2f56d3b44979b3990335e7869b002c005ef80ba7"
-  revision 1
+  revision 3
 
   bottle do
-    sha256 "1e5af583921af3996ad8af8605306a1dcd1f0e6d34d4e3b1b24e034e24bb12e1" => :yosemite
-    sha256 "9082a86dadb7abb648c00c8f6ce811662de8b3ab0863c67e8be8e9e2fe354a8a" => :mavericks
-    sha256 "6b22b34a9b733ce90ee62f90191ccc17566000d9bfe2e80161bc227aa1e63b66" => :mountain_lion
+    sha256 "6d6cde64cfab4577caee9af690c6203fc43d385e123bbf0669b747810756dd7b" => :el_capitan
+    sha256 "dc073de6db3f2e26da79cdbf6cdca4d113d63211ad5a71f6cdc4d728fc61a8ef" => :yosemite
+    sha256 "f25556651c1e40dbbe7ac9a6bc0e305c5bcd7550511f54fd68f58c4181259b93" => :mavericks
   end
 
   depends_on "r"
